@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      renderKitId="PRIMEFACES_MOBILE">
+    <h:head>
+        <script type="text/javascript" src="common.js"></script>
+        <style type="text/css">
+            .ddlStyle{
+                width: 70%;
+                height: 70px;
+                text-align: center;
+                font-size: xx-large;
+            }
+            
+            .btnClass{
+                margin-top: 18%;
+                color: white; 
+                background-color: rgb(60,210,85);
+                width: 40%;
+                height: 80px;
+                text-align: center;
+                font-size: xx-large;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: rgb(232,226,214);">
+        <script type="text/javascript">
+
+            function doValidate()
+            {
+
+                showMessage("");
+
+                if (!validateRequiredText("loginForm:phoneNo", "Phone number"))
+                    return false;
+                
+                if (!validateRequiredText('loginForm:firstName1', "First Name"))
+                    return false;
+
+                if (!validateRequiredText("loginForm:lastName", "Last Name"))
+                    return false;
+
+                if (!validateRequiredSelect("loginForm:city", "City"))
+                    return false;
+
+                if (!validateRequiredSelect("loginForm:college", "College"))
+                    return false;
+                return true;
+            }
+
+
+        </script>
+        <h:form id="loginForm" style="border-color: aquamarine;position: inherit; ">
+            <center>
+                <div style="margin-top: 10%; width: 70%">
+                    <h:panelGrid columns="1" style="width: 60%">
+                        <h:graphicImage url="/images/pngimages/hikenew.png" style="width: 100%;height: 120%;"/>
+                    </h:panelGrid>
+                </div>
+                <div id="wrapper" style="margin-top: 10%; width: 100%">
+                    
+                    <div id="msgdiv" style="margin-top: 12%">
+                        <h:outputText id="message" style="color:red;margin:8px;"/> 
+                        <h:message id="allErrors" for="loginForm" style="color:red;margin:8px;"/>
+                    </div>
+
+
+                    <div id="loginDiv">
+                        <h:panelGrid columns="1" style="text-align: center;width: 100%;height: 100%">  
+                            <p:watermark for="phoneNo" value="Phone#"/>
+                            <p:inputText id="phoneNo" onkeypress="intOnly()" value="#{loginPageCode.phoneNo}" maxlength="14" styleClass="ddlStyle">
+                                <p:ajax event="valueChange" listener="#{loginPageCode.loadData}"/>
+                            </p:inputText>
+
+
+                            <p:watermark for="firstName1" value="First Name"/>
+                            <p:inputText id="firstName1" value="#{loginPageCode.firstName}" maxlength="30" styleClass="ddlStyle"/>
+
+                            <p:watermark  for="lastName" value="Last Name"/>
+                            <p:inputText id="lastName" value="#{loginPageCode.lastName}" maxlength="30" styleClass="ddlStyle"/>
+
+
+                            <h:selectOneMenu id="city" value="#{loginPageCode.city}" onchange="submit()" valueChangeListener="#{loginPageCode.cityChangeLstnr}" styleClass="ddlStyle">
+                                <f:selectItems value="#{loginPageCode.cities}"/>
+                            </h:selectOneMenu>
+
+                            <h:selectOneMenu id="college" value="#{loginPageCode.college}" styleClass="ddlStyle">
+                                <f:selectItems value="#{loginPageCode.colleges}"/>
+                            </h:selectOneMenu>
+                            
+                            <h:commandButton value="Submit" onclick="return doValidate();" action="#{loginPageCode.submit}" styleClass="btnClass"/>
+                        </h:panelGrid>
+                    </div>
+                    
+                </div>
+        <h:graphicImage url="/images/pngimages/logo.png" style="margin-top: 1%; height: 1%;width:15%"/>
+            </center>
+        </h:form>
+    </h:body>
+</html>

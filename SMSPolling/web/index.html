@@ -1,0 +1,220 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="menu.css" />
+        <script type="text/javascript" src="jquery.mobile/jquery-1.8.2.min.js"></script>
+        <script src="jquery.mobile/modernizr.custom.min.js"></script>
+        <script src="jquery.mobile/highcharts-more.js"></script>
+        <script src="jquery.mobile/highcharts.js"></script>
+        <script src="jquery.mobile/highcharts.src.js"></script>
+        <script src="jquery.mobile/purl.js"></script>
+        <title>Polls</title> 
+
+        <script type="text/javascript">
+            var phnNo=$.url().param('phnNo');
+            var timerStarted=false;
+            setInterval(function() {
+                getData();
+            }, 5000);
+            
+            
+            var dataSum;
+            var minutes = 0;
+            var seconds = 45;
+            var intervalId = 0;
+            function startTimer(){
+                $.getJSON("http://54.200.86.247:8084/smsPolling/setStart?phnNo="+phnNo, function(inData) {
+                    
+                });
+                if(timerStarted == false){
+                    minutes = 0;
+                    seconds = 45;
+                    intervalId=setInterval(function() {
+                        setTimer();
+                    }, 1000);
+                    timerStarted=true;
+                } else{
+                    minutes=0;
+                    seconds=1;
+                    timerStarted=false;
+                    clearInterval(intervalId);
+                }
+            }
+            
+            function setTimer(){
+                var secondLocal;
+                var minuteLocal;
+                if (seconds == 0){
+                    if(minutes == 0){
+                        return;
+                    }
+                    seconds = 59;
+                    secondLocal = '59';
+                    minutes = minutes - 1;
+                    minuteLocal = '0'+minutes;
+                } else{
+                    seconds = seconds - 1;
+                    if (seconds < 10){
+                        secondLocal = '0'+seconds;
+                    } else{
+                        secondLocal = ''+seconds;
+                    }
+                    minuteLocal = '0'+minutes;
+                }
+                document.getElementById('time').innerHTML = minuteLocal+':'+secondLocal;
+            }
+            
+            function formatPercent() {
+                var pcnt = (this.y / dataSum) * 100;
+                return '<b style="font-size: 24px;">'+Highcharts.numberFormat(pcnt) + '%' + '</b>';
+            }
+            function getData() {
+                console.log("retrieving data from server ");
+                var url = "http://54.200.86.247:8084/smsPolling/CallPoll?phnNo="+phnNo;
+                $.getJSON(url, function(inData) {
+                    document.getElementById('question').innerHTML = inData.question;
+                    document.getElementById('aOpt').innerHTML = inData.options[0];
+                    document.getElementById('bOpt').innerHTML = inData.options[1];
+                    document.getElementById('cOpt').innerHTML = inData.options[2];
+                    document.getElementById('dOpt').innerHTML = inData.options[3];
+                    // update the series data
+                    var colors = Highcharts.getOptions().colors;
+                    var data = [];
+                    dataSum = inData.optionsCount[0] + inData.optionsCount[1] + inData.optionsCount[2] + inData.optionsCount[3];
+                    document.getElementById('total').innerHTML = 'Total number of Votes: ' + dataSum;
+                    data.push({y: parseInt(inData.optionsCount[0]), color: colors[0 % colors.length]});
+                    data.push({y: parseInt(inData.optionsCount[1]), color: colors[1 % colors.length]});
+                    data.push({y: parseInt(inData.optionsCount[2]), color: colors[2 % colors.length]});
+                    data.push({y: parseInt(inData.optionsCount[3]), color: colors[3 % colors.length]});
+                    var pollChart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'chartContainer1',
+                            type: 'column' // change this to column if want to show the column chart
+                        },
+                        title: {
+                            text: '',
+                            style: {
+                                color: '#3E576F',
+                                fontSize: '23px',
+                                fontFamily: 'Helvetica Neue,Helvetica,Arial,sans-serif'
+                            }
+                        },
+                        /*
+                         subtitle: {
+                         text: 'Poll Description here'
+                         },
+                         */
+                        xAxis: {
+                            categories: ['A', 'B', 'C', 'D'],
+                            labels: {
+                                style: {
+                                    fontSize: '24px',
+                                    fontFamily: 'Helvetica Neue,Helvetica,Arial,sans-serif',
+                                    color: 'black'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Votes',
+                                style: {
+                                    fontSize: '24px',
+                                    fontFamily: 'Helvetica Neue,Helvetica,Arial,sans-serif',
+                                    color: 'black',
+                                    fontWeight: 'normal'
+                                }
+                            }
+                        },
+                        series: [{
+                                name: 'Options',
+                                data: data,
+                                dataLabels: {
+                                    enabled: true,
+                                    formatter: formatPercent,
+                                }
+                            }
+                        ],
+                        exporting: {
+                            enabled: false
+                        }
+                    });
+                });
+            }
+
+            $(document).ready(function() {
+                getData();
+            });
+
+        </script>
+
+    </head> 
+
+    <body style="background-color: rgb(170,198,222);"> 
+        <table style="height: 100%; width: 100%; padding-top: 5%">
+            <tr style="height: 100%; width: 100%;">
+                <td style="width: 60%; padding-right: 10px; c" >
+                    <table style="height: 100%; width: 100%;">
+                        <tr>
+                            <td style="width: 100%;">
+                                <div id="hello" style="height: 100%; width: 100%; padding: 10px; border-radius: 20px; background-color: rgb(2,104,170); color: white">
+                                    <h1 id="question" style="padding-top: 0%; font-size: 54px; font: bold; font-family: serif;"></h1>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100%;">
+                                <div id="chartContainer1"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="hello1" style="height: 100%; width: 100%; padding: 10px; border-radius: 20px; background-color: rgb(2,104,170); color: white">
+                                    <h1 id="total" style="font-size: 54px; font: bold; font-family: serif;"></h1>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 40%; padding-left: 50px;">
+                    <table style="height: 100%; width: 100%;">
+                        <tr style="padding-bottom: 30px;padding-top: 30px; font-size: 54px; font: bold; font-family: serif;">
+                            <td>
+                                Time Left <br>
+                                <div style="height: 100%; width: 50%; padding: 10px; border-radius: 20px; background-color: rgb(2,104,170); color: white">
+                                    <h1 id="time" style="font-size: 54px; font: bold; font-family: serif; text-align: center"></h1>
+                                </div> 
+                            </td>
+                            <td><img src="img/button.png" onclick="startTimer();"/></td>
+                        </tr>
+                        <tr style="padding-bottom: 8px;padding-top: 8px">
+                            <td>
+                                <table style="font-size: 54px;">
+                                    <tr style="padding-bottom: 30px;padding-top: 30px; font-size: 60px; font: bold; font-family: serif; color: rgb(0,0,99)">
+                                        <td><table><tr><td><img src="img/a.png"></td> <td><span style="padding-bottom: 3px">080 6791 3501</span></td><tr><td colspan="2">  <p id="aOpt"></p></td></tr></table> </td>
+                                    </tr>
+                                    <tr style="padding-bottom: 30px;padding-top: 30px; font-size: 60px; font: bold; font-family: serif; color: rgb(0,0,99)">
+                                        <td><table><tr><td><img src="img/b.png"> </td> <td><span style="padding-bottom: 3px">080 6791 3502 </span></td><tr><td colspan="2"><p id="bOpt"></p></td></tr></table> </td>
+                                    </tr>
+                                    <tr style="padding-bottom: 30px;padding-top: 30px; font-size: 60px; font: bold; font-family: serif; color: rgb(0,0,99)">
+                                        <td><table><tr><td><img src="img/c.png"></td> <td><span style="padding-bottom: 3px">080 6791 3503 </span></td><tr><td colspan="2"><p id="cOpt"></p></td></tr></table> </td>
+                                    </tr>
+                                    <tr style="padding-bottom: 30px;padding-top: 30px; font-size: 60px; font: bold; font-family: serif; color: rgb(0,0,99)">
+                                        <td><table><tr><td><img src="img/d.png"> </td> <td><span style="padding-bottom: 3px">080 6791 3504 </span></td><tr><td colspan="2"><p id="dOpt"></p></td></tr></table> </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            
+        </tr>
+        <tr>
+
+        </tr>
+        <tr>
+        
+    </tr>
+</table>
+</body>
+</html>

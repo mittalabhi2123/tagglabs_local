@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <script type="text/javascript">
+            function goBack2Social(){
+                window.location='/social.jsf';
+            }
+            
+            function gotoHike(){
+                window.location='http://get.hike.in/';
+            }
+        </script>
+        <style type="text/css">
+            
+            .btnClass{
+                margin-top: 10%;
+                margin-right: 10%;
+                color: white; 
+                background-color: rgb(60,210,85);
+                width: 90%;
+                height: 100%;
+                text-align: center;
+                font-size: xx-large;
+            }
+            
+            .btnClass1{
+                margin-top: 10%;
+                color: white; 
+                background-color: rgb(51,102,255);
+                width: 110%;
+                height: 102%;
+                text-align: center;
+                font-size: xx-large;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: rgb(232,226,214);">
+        <script type="text/javascript">
+
+            function openHike(){
+                window.location = 'http://get.hike.in/';
+            }
+        </script>
+        <h:form id="loginForm" style="border-color: aquamarine;position: inherit">
+            <center>
+                <div id="wrapper"  style="margin-top: 2%; width: 100%">
+                    <h:graphicImage url="/images/pngimages/congratulations.jpg" style="width: 100%;height: 100%"/>
+                    <h:outputText id="message" style="color:red;margin:8px;"/>
+                    <div id="congratsDiv">
+                        <h:panelGrid columns="1" style="margin-top: 2%">
+                            <h:panelGroup>
+                                <h1 style="font-size: 300%"> 1. Hey! You are now active on Hike Collejing Contest !</h1>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h1 style="font-size: 300%"> 2. To win a V.I.P pass to Collejing  Gig, Click a pic of your gang</h1>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h1 style="font-size: 300%"> 3. Share that pic on Facebook and Twitter with a cool caption </h1>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h1 style="font-size: 300%"> 4. Include Hashtag #ihike in the caption</h1>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h1 style="font-size: 300%"> 5. User with the Maximum number of Likes and Comments on the Pictures Wins a Pass</h1>
+                            </h:panelGroup>
+                            
+                        </h:panelGrid>
+                        
+                            <h:panelGrid columns="2" style="width:50%">
+                                <h:outputLabel value="Go back to connect&lt;br/&gt;more social accounts" style="color: grey;font-size: large;margin-right: 10%; width: 100%"  escape="false"/>
+                                <h:outputLabel value="Download Hike&lt;br/&gt;  Messenger" style="color: grey;font-size: large; width: 100%" escape="false"/>
+                                <h:button value="Back" onclick="return goBack2Social();" styleClass="btnClass"/>
+                                <h:button value="HIKE.in" onclick="return gotoHike();" styleClass="btnClass1" />
+                            </h:panelGrid>
+                    </div>
+                    <h:graphicImage url="/images/pngimages/logo.png" style="margin-top: 1%; height: 1%;width:15%"/>
+                </div>
+            </center>
+        </h:form>
+
+    </h:body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="menu.css" />
+        <script type="text/javascript" src="jquery.mobile/jquery-1.8.2.min.js"></script>
+        <script src="jquery.mobile/modernizr.custom.min.js"></script>
+                <script src="jquery.mobile/highcharts-more.js"></script>
+                <script src="jquery.mobile/highcharts.js"></script>
+                                <script src="jquery.mobile/highcharts.src.js"></script>
+        <title>Page Title</title> 
+
+        <script type="text/javascript">
+
+            function callURL(url) {
+                $.getJSON(url, function(inData) {
+                });
+            };
+
+            function onclick(url) {
+                callURL(url);
+            };
+        </script>
+    </head> 
+    <body> 
+    <center><div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a href="javascript:onclick('http://54.200.86.247:8080/MissedCallPolls/UpdatePoll1');"><label id="1" style="font-size:18px; font-weight:bold;">Answer 1</label></a></br>
+                
+            </div>
+            <div class="ui-block-b">
+                <a href="javascript:onclick('http://54.200.86.247:8080/MissedCallPolls/UpdatePoll2');"><label id="1" style="font-size:18px; font-weight:bold;">Answer 2</label></a></br>
+                
+            </div>
+            <div class="ui-block-a">
+                <a href="javascript:onclick('http://54.200.86.247:8080/MissedCallPolls/UpdatePoll3');"><label id="1" style="font-size:18px; font-weight:bold;">Answer 3</label></a></br>
+                
+            </div>
+            <div class="ui-block-b">
+                <a href="javascript:onclick('http://54.200.86.247:8080/MissedCallPolls/UpdatePoll4');"><label id="1" style="font-size:18px; font-weight:bold;">Answer 4</label></a></br>
+                
+            </div>
+        </div></center>
+
+
+
+</body>
+</html>
