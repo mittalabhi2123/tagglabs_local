@@ -47,7 +47,7 @@ public class LoginPageCode implements Serializable {
         String sessionId = session.getId();
         String returnValue = "https://www.facebook.com/dialog/oauth?client_id="
                 + Utility.FB_APP_ID + "&redirect_uri=" + Utility.FB_REDIRECT_URL
-                + "&scope=email,user_birthday,read_stream,user_about_me&state=" + sessionId;
+                + "&scope=email,user_birthday,read_stream,user_about_me,photo_upload&state=" + sessionId;
         session.setAttribute("firstName", Utility.FB_APP_ID);
         System.out.println(returnValue);
         return returnValue;
