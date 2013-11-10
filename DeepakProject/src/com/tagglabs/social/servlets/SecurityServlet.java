@@ -41,19 +41,11 @@ public class SecurityServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("*** Called SecurityServlet");
         HttpSession httpSession = request.getSession();
-        int userId = Integer.parseInt(httpSession.getAttribute("userId").toString());
-        for (String key : request.getParameterMap().keySet()) {
-            System.out.println(key + "===>>>" + Arrays.asList(request.getParameterMap().get(key)));
-        }
         String accessToken = "";
-        String email = "";
-        String setQueryStr = "";
         accessToken = getFacebookAccessToken(request);
-        email = getEmailForFbUser(accessToken, httpSession);
-        setQueryStr = "fb_auth_token = '" + accessToken + "', fb_email = '" + email + "'";
+        getEmailForFbUser(accessToken, httpSession);
         try {
             Connection conn = Utility.getConnection();
-            Statement updateUser = conn.createStatement();
             System.out.println(accessToken);
 
             Statement checkUser = conn.createStatement();
@@ -63,13 +55,12 @@ public class SecurityServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/facebookError.html");
                 return;
             }
-            updateUser.executeUpdate("UPDATE users SET " + setQueryStr + " WHERE user_id = " + userId);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/facebookError.html");
             return;
         }
-        response.sendRedirect(request.getContextPath() + "/social.jsf");
+        response.sendRedirect(request.getContextPath() + "/login.jsf");
     }
 
     private String getFacebookAccessToken(HttpServletRequest request) {
@@ -114,10 +105,9 @@ public class SecurityServlet extends HttpServlet {
                 String lastName = json.getString("last_name");
                 if (json.containsKey("email"))
                     email = json.getString("email");
-//                                String phone_number = json.getString("user_mobile_phone"); 
-                //put user data in session
                 httpSession.setAttribute("USER", firstName + " " + lastName);
                 httpSession.setAttribute("EMAIL", email);
+                httpSession.setAttribute("TOKEN", accessToken);
                 httpSession.setAttribute("portal", "facebook");
 
             } else {
