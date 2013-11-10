@@ -19,7 +19,7 @@ public class CronScheduler {
 			.newTrigger()
 			.withIdentity("dummyTriggerName", "group1")
 			.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInMinutes(5).repeatForever())
+				.withIntervalInMinutes(30).repeatForever())
 			.build();
     	
         Scheduler scheduler = new StdSchedulerFactory().getScheduler();
@@ -33,7 +33,7 @@ public class CronScheduler {
 			.newTrigger()
 			.withIdentity("dummyTriggerName1", "group2")
 			.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInMinutes(18).repeatForever())
+				.withIntervalInMinutes(50).repeatForever())
 			.build();
     	
         Scheduler scheduler1 = new StdSchedulerFactory().getScheduler();

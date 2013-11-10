@@ -38,9 +38,9 @@ public class CronJobPostsLikes implements Job {
             while (users.next()) {
                 int userId = users.getInt(1);
                 String fbAuthToken = users.getString(2);
-                String twitterAuthToken = users.getString(3);
-                String twitterAuthSecret = users.getString(4);
-                String instagramAuthToken = users.getString(5);
+//                String twitterAuthToken = users.getString(3);
+//                String twitterAuthSecret = users.getString(4);
+//                String instagramAuthToken = users.getString(5);
                 try{
                         if(fbAuthToken!=null && fbAuthToken.length()>0)
                             runFbJob(fbAuthToken);
@@ -48,13 +48,13 @@ public class CronJobPostsLikes implements Job {
                     e.printStackTrace();
                     System.out.println("User Id::"+userId);
                 }
-                try{
-                if(twitterAuthToken!=null && twitterAuthToken.length()>0)
-                    runTwitterJob(twitterAuthToken, twitterAuthSecret, userId);
-                } catch(Exception e){
-                    e.printStackTrace();
-                    System.out.println("User Id::"+userId);
-                }
+//                try{
+//                if(twitterAuthToken!=null && twitterAuthToken.length()>0)
+//                    runTwitterJob(twitterAuthToken, twitterAuthSecret, userId);
+//                } catch(Exception e){
+//                    e.printStackTrace();
+//                    System.out.println("User Id::"+userId);
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
