@@ -11,10 +11,6 @@
             function goBack2Social(){
                 window.location='/social.jsf';
             }
-            
-            function gotoHike(){
-                window.location='http://get.hike.in/';
-            }
         </script>
         <style type="text/css">
             
@@ -22,7 +18,7 @@
                 margin-top: 10%;
                 margin-right: 10%;
                 color: white; 
-                background-color: rgb(60,210,85);
+                background-image: url('images/new.png');
                 width: 90%;
                 height: 100%;
                 text-align: center;
@@ -40,49 +36,20 @@
             }
         </style>
     </h:head>
-    <h:body style="background-color: rgb(232,226,214);">
-        <script type="text/javascript">
-
-            function openHike(){
-                window.location = 'http://get.hike.in/';
-            }
-        </script>
-        <h:form id="loginForm" style="border-color: aquamarine;position: inherit">
+    <h:body style="background-image: url('images/bg3.png'); background-repeat: no-repeat; background-position: center;">
+        <h:form id="loginForm">
             <center>
-                <div id="wrapper"  style="margin-top: 2%; width: 100%">
-                    <h:graphicImage url="/images/pngimages/congratulations.jpg" style="width: 100%;height: 100%"/>
-                    <h:outputText id="message" style="color:red;margin:8px;"/>
-                    <div id="congratsDiv">
-                        <h:panelGrid columns="1" style="margin-top: 2%">
-                            <h:panelGroup>
-                                <h1 style="font-size: 300%"> 1. Hey! You are now active on Hike Collejing Contest !</h1>
-                            </h:panelGroup>
-                            <h:panelGroup>
-                                <h1 style="font-size: 300%"> 2. To win a V.I.P pass to Collejing  Gig, Click a pic of your gang</h1>
-                            </h:panelGroup>
-                            <h:panelGroup>
-                                <h1 style="font-size: 300%"> 3. Share that pic on Facebook and Twitter with a cool caption </h1>
-                            </h:panelGroup>
-                            <h:panelGroup>
-                                <h1 style="font-size: 300%"> 4. Include Hashtag #ihike in the caption</h1>
-                            </h:panelGroup>
-                            <h:panelGroup>
-                                <h1 style="font-size: 300%"> 5. User with the Maximum number of Likes and Comments on the Pictures Wins a Pass</h1>
-                            </h:panelGroup>
-                            
+                <div id="wrapper" style="margin-top: 10%; width: 100%">
+                    <div id="loginDiv">
+                        <h:panelGrid columns="1" style="width:60%;margin-top: 1%; margin-left: 35%;">
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:graphicImage url="/images/tnx.png"/>
+                            <h:button value="Back" onclick="return goBack2Social();" styleClass="btnClass"/>
                         </h:panelGrid>
-                        
-                            <h:panelGrid columns="2" style="width:50%">
-                                <h:outputLabel value="Go back to connect&lt;br/&gt;more social accounts" style="color: grey;font-size: large;margin-right: 10%; width: 100%"  escape="false"/>
-                                <h:outputLabel value="Download Hike&lt;br/&gt;  Messenger" style="color: grey;font-size: large; width: 100%" escape="false"/>
-                                <h:button value="Back" onclick="return goBack2Social();" styleClass="btnClass"/>
-                                <h:button value="HIKE.in" onclick="return gotoHike();" styleClass="btnClass1" />
-                            </h:panelGrid>
                     </div>
-                    <h:graphicImage url="/images/pngimages/logo.png" style="margin-top: 1%; height: 1%;width:15%"/>
                 </div>
             </center>
         </h:form>
-
     </h:body>
 </html>
