@@ -41,6 +41,14 @@ public class SecurityServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("*** Called SecurityServlet");
         HttpSession httpSession = request.getSession();
+        if (httpSession.getAttribute("TOKEN") != null){
+            httpSession.setAttribute("USER", null);
+            httpSession.setAttribute("EMAIL", null);
+            httpSession.setAttribute("TOKEN", null);
+            httpSession.setAttribute("portal", null);
+            response.sendRedirect(request.getContextPath() + "/social.jsf");
+            return;
+        }
         String accessToken = "";
         accessToken = getFacebookAccessToken(request);
         getEmailForFbUser(accessToken, httpSession);

@@ -48,7 +48,7 @@ public class CronJobPosts implements Job {
 //            String instagramAuthToken = users.getString(5);
             
             try{
-                if(fbAuthToken!=null && fbAuthToken.length()>0)
+                if(fbAuthToken!=null && fbAuthToken.length()>0 && !fbAuthToken.equalsIgnoreCase("null"))
                     runFbJob(fbAuthToken, userId);
                 } catch(Exception e){
                     e.printStackTrace();

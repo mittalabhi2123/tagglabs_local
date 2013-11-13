@@ -137,7 +137,7 @@ public class LoginPageCode implements Serializable {
                 createUser.setString(1, accessToken);
                 createUser.setString(2, String.valueOf(phoneNo));
                 createUser.setString(3, city);
-                createUser.setInt(6, userId);
+                createUser.setInt(4, userId);
                 createUser.executeUpdate();
             }
         } catch (Exception e) {
