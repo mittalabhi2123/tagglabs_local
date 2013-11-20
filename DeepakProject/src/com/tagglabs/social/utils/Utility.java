@@ -16,8 +16,7 @@ public class Utility {
     public static final String HASH_TAG = "#ihike";
         
     public static final String EMAIL = "hikecollejing@gmail.com";
-    public static final String PASSWORD = "12345six";
-    
+    public static final String PASSWORD = "12345@six";
     static Connection conn;
     public static Connection getConnection() throws Exception{
         if (conn == null || conn.isClosed() || !conn.isValid(10)){

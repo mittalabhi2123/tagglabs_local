@@ -1,12 +1,16 @@
 package com.tagglabs.social.servlets;
 
 import com.tagglabs.social.utils.Utility;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -15,6 +19,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 @ManagedBean(name = "loginPageCode")
 @SessionScoped
@@ -47,7 +58,7 @@ public class LoginPageCode implements Serializable {
         String sessionId = session.getId();
         String returnValue = "https://www.facebook.com/dialog/oauth?client_id="
                 + Utility.FB_APP_ID + "&redirect_uri=" + Utility.FB_REDIRECT_URL
-                + "&scope=email,user_birthday,read_stream,user_about_me,photo_upload&state=" + sessionId;
+                + "&scope=email,user_birthday,read_stream,user_about_me,photo_upload,rsvp_event&state=" + sessionId;
         session.setAttribute("firstName", Utility.FB_APP_ID);
         System.out.println(returnValue);
         return returnValue;
@@ -131,6 +142,8 @@ public class LoginPageCode implements Serializable {
                 createUser.setString(15, "");
                 createUser.executeUpdate();
                 ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute("userId", userId);
+                ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute("city", city);
+                checkInUser(accessToken, city);
             } else {
                 int userId = Integer.parseInt(((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).getAttribute("userId").toString());
                 PreparedStatement createUser = conn.prepareStatement("UPDATE users SET fb_auth_token=?, phone_no=?, city=? WHERE user_id = ?");
@@ -139,6 +152,7 @@ public class LoginPageCode implements Serializable {
                 createUser.setString(3, city);
                 createUser.setInt(4, userId);
                 createUser.executeUpdate();
+                ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).setAttribute("city", city);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,5 +178,44 @@ public class LoginPageCode implements Serializable {
     protected static void showError(String pSummary) {
         showError("loginForm", pSummary, null);
 
+    }
+    
+    
+    private void checkInUser(String accessToken, String city) {
+        try{
+        ResultSet rs = Utility.getConnection().createStatement().executeQuery("SELECT placeId, eventId, placeCaption FROM day_college WHERE city = '" + city + "' LIMIT 1");
+        while (rs.next()) {
+            String placePageId = rs.getString(1);
+            String eventId = rs.getString(2);
+            String url = "https://graph.facebook.com/me/feed";
+            String url2 = "https://graph.facebook.com/" + eventId + "/attending";
+            HttpClient client = new DefaultHttpClient();
+            HttpClient client2 = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url);
+            HttpPost post2 = new HttpPost(url2);
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            List<NameValuePair> urlParameters2 = new ArrayList<NameValuePair>();
+            urlParameters.add(new BasicNameValuePair("message", rs.getString(3)));
+            urlParameters.add(new BasicNameValuePair("place", placePageId));
+            urlParameters2.add(new BasicNameValuePair("access_token", accessToken));
+            urlParameters.addAll(urlParameters2);
+            post.setEntity(new UrlEncodedFormEntity(urlParameters));
+            post2.setEntity(new UrlEncodedFormEntity(urlParameters2));
+            HttpResponse responseFb = client.execute(post);
+            HttpResponse responseFb2 = client2.execute(post2);
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(responseFb.getEntity().getContent()));
+
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+            System.out.println("result.............." + result);
+        }
+        } catch(Exception e){
+            e.printStackTrace();
+            return;
+        }
     }
 }

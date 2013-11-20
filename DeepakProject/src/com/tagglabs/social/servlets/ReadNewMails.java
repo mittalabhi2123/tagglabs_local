@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Random;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
@@ -33,6 +34,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -89,8 +91,12 @@ public class ReadNewMails extends HttpServlet {
                     continue;
                 System.out.println(i+". Subject:::"+msg[i].getSubject());
                 String[] phoneNos = msg[i].getSubject().split(",");
-                Multipart multipart = (Multipart) msg[i].getContent();
-                
+                Multipart multipart = null;
+                try{
+                multipart = (Multipart) msg[i].getContent();
+                } catch(ClassCastException ec){
+                    continue;
+                }
                 for (int j = 0; j < multipart.getCount(); j++) {
                     BodyPart bodyPart = multipart.getBodyPart(j);
                     if(!Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) &&
@@ -98,7 +104,7 @@ public class ReadNewMails extends HttpServlet {
                       continue; // dealing with attachments only
                     } 
                     InputStream is = bodyPart.getInputStream();
-                    File f = new File("/tmp/" + bodyPart.getFileName());
+                    File f = new File("C:\\tmp\\" + bodyPart.getFileName());
                     FileOutputStream fos = new FileOutputStream(f);
                     byte[] buf = new byte[4096];
                     int bytesRead;
@@ -108,12 +114,21 @@ public class ReadNewMails extends HttpServlet {
                     fos.close();
                     System.out.println("File created....");
                     for(String phoneNo : phoneNos) {
-                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
+                        phoneNo = phoneNo.trim();
+                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
                         while (rs.next()) {//TODO user already exists
-                            HttpPost post = new HttpPost("https://graph.facebook.com/me/photos?access_token="+rs.getString(1)); 
+                            System.out.println(phoneNo);
+                            ResultSet rs2 = Utility.getConnection().createStatement().executeQuery("SELECT eventId, picCaption FROM day_college WHERE city = '" + rs.getString(2) + "' LIMIT 1");
+                            if(!rs2.next())
+                                break;
+                            int msgNo = (new Random()).nextInt(4);
+                            String message = rs2.getString(2).split("::")[msgNo];
+                            HttpPost post = new HttpPost("https://graph.facebook.com/" + rs2.getString(1) + "/photos?access_token="+rs.getString(1)); 
                             MultipartEntity reqEntity = new MultipartEntity();
                             reqEntity.addPart("source", new FileBody(f));
+                            reqEntity.addPart("message", new StringBody(message));
                             post.setEntity(reqEntity);
+                            post.setHeader("message", message);
                             HttpResponse response1 = client.execute(post);
                             HttpEntity resEntity = response1.getEntity();
                             System.out.println(response1.getStatusLine());
@@ -125,16 +140,20 @@ public class ReadNewMails extends HttpServlet {
                             }
                         }
                         System.out.println("File posted....");
-                            client.getConnectionManager().shutdown();
+                            
                     }
+                    f.delete();
                 }
                 fldr.setFlags(msg, new Flags(Flags.Flag.SEEN), true);
                 System.out.println("SentDate : " + msg[i].getSentDate() + "\n" + "From : " + msg[i].getFrom()[0] + "\n" + "Subject : " + msg[i].getSubject() + "\n" + "Message : " + "\n" + msg[i].getContent().toString());
             }
             fldr.close(true);
             store.close();
+            client.getConnectionManager().shutdown();
         } catch (Exception e) {
             try{
+                client.getConnectionManager().shutdown();
+                            
             fldr.close(true);
             store.close();
             } catch(Exception e1){
