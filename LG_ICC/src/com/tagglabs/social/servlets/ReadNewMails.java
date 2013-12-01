@@ -121,9 +121,8 @@ public class ReadNewMails extends HttpServlet {
                             ResultSet rs2 = Utility.getConnection().createStatement().executeQuery("SELECT eventId, picCaption FROM day_college WHERE city = '" + rs.getString(2) + "' LIMIT 1");
                             if(!rs2.next())
                                 break;
-                            int msgNo = (new Random()).nextInt(4);
-                            String message = rs2.getString(2).split("::")[msgNo];
-                            HttpPost post = new HttpPost("https://graph.facebook.com/" + rs2.getString(1) + "/photos?access_token="+rs.getString(1)); 
+                            String message = rs2.getString(2);
+                            HttpPost post = new HttpPost("https://graph.facebook.com/me/photos?access_token="+rs.getString(1)); 
                             MultipartEntity reqEntity = new MultipartEntity();
                             reqEntity.addPart("source", new FileBody(f));
                             reqEntity.addPart("message", new StringBody(message));
@@ -131,9 +130,12 @@ public class ReadNewMails extends HttpServlet {
                             post.setHeader("message", message);
                             HttpResponse response1 = client.execute(post);
                             HttpEntity resEntity = response1.getEntity();
-                            System.out.println(response1.getStatusLine());
                             if (resEntity != null) {
-                              System.out.println(EntityUtils.toString(resEntity));
+                                InputStream instream = resEntity.getContent();
+                                int l;
+                                byte[] tmp = new byte[(int)resEntity.getContentLength()];
+                                instream.read(tmp);
+                                System.out.println(new String(tmp));
                             }
                             if (resEntity != null) {
                               resEntity.consumeContent();
@@ -146,7 +148,7 @@ public class ReadNewMails extends HttpServlet {
                     f.delete();
                 }
                 
-                System.out.println("SentDate : " + msg[i].getSentDate() + "\n" + "From : " + msg[i].getFrom()[0] + "\n" + "Subject : " + msg[i].getSubject() + "\n" + "Message : " + "\n" + msg[i].getContent().toString());
+                
             }
             fldr.close(true);
             store.close();
