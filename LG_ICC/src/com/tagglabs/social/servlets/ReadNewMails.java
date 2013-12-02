@@ -37,6 +37,11 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  *
@@ -113,15 +118,22 @@ public class ReadNewMails extends HttpServlet {
                     }
                     fos.close();
                     System.out.println("File created....");
-                    for(String phoneNo : phoneNos) {
+                    phones:for(String phoneNo : phoneNos) {
                         phoneNo = phoneNo.trim();
-                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
+                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city, twitter_auth_token, twitter_auth_secret FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
                         while (rs.next()) {//TODO user already exists
                             System.out.println(phoneNo);
                             ResultSet rs2 = Utility.getConnection().createStatement().executeQuery("SELECT eventId, picCaption FROM day_college WHERE city = '" + rs.getString(2) + "' LIMIT 1");
                             if(!rs2.next())
                                 break;
                             String message = rs2.getString(2);
+                            String fbAccessToken = rs.getString(1);
+                            if(fbAccessToken == null || fbAccessToken.isEmpty() || fbAccessToken.trim().length() < 8){
+                                System.out.println("hello....."+fbAccessToken);
+                                postTwitterImage(rs.getString(3), rs.getString(4), f, message);
+                                fldr.setFlags(new Message[]{msg[i]}, new Flags(Flags.Flag.SEEN), true);
+                                continue phones;
+                            }
                             HttpPost post = new HttpPost("https://graph.facebook.com/me/photos?access_token="+rs.getString(1)); 
                             MultipartEntity reqEntity = new MultipartEntity();
                             reqEntity.addPart("source", new FileBody(f));
@@ -165,5 +177,15 @@ public class ReadNewMails extends HttpServlet {
             client.getConnectionManager().shutdown();
             throw new RuntimeException(e);
         }
+    }
+    
+    private void postTwitterImage(String twtToken, String twtSecret, File image, String message) throws Exception{
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        builder.setOAuthConsumerKey(Utility.TWITTER_CONSUMER_KEY);
+        builder.setOAuthConsumerSecret(Utility.TWITTER_CONSUMER_SECRET);
+        Twitter twitter = new TwitterFactory(builder.build()).getInstance(new AccessToken(twtToken, twtSecret));
+        StatusUpdate status = new StatusUpdate("#LGmycricketmyvoice - That's me with the original trophy of LG People's Choice Award.");
+        status.setMedia(image);
+        twitter.updateStatus(status);
     }
 }

@@ -27,16 +27,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONSerializer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 /**
  *
@@ -133,7 +138,16 @@ public class ReadNewMails extends HttpServlet {
                             HttpEntity resEntity = response1.getEntity();
                             System.out.println(response1.getStatusLine());
                             if (resEntity != null) {
-                              System.out.println(EntityUtils.toString(resEntity));
+                              String responseData = EntityUtils.toString(resEntity);
+                              System.out.println(responseData);
+                              //{"id":"10152026299253058","post_id":"669853057_514100968696757"}
+                              String intermediateData = responseData.split(",")[0].split(":")[1];
+                              String photoId = intermediateData.substring(1, intermediateData.length() - 1);
+                              System.out.println("photoId...."+photoId);
+                              String userId = getUserId(rs.getString(1), client);
+                              System.out.println("userId...."+userId);
+                              HttpPost post2 = new HttpPost("https://graph.facebook.com/" + photoId + "/tags/"+userId + "?access_token="+rs.getString(1)); 
+                              client.execute(post2);
                             }
                             if (resEntity != null) {
                               resEntity.consumeContent();
@@ -163,5 +177,16 @@ public class ReadNewMails extends HttpServlet {
             client.getConnectionManager().shutdown();
             throw new RuntimeException(e);
         }
+    }
+
+    private String getUserId(String accessToken, HttpClient client) throws IOException {
+        String newUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
+        client = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet(newUrl);
+        System.out.println("Get info from face --> executing request: " + httpget.getURI());
+        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        String responseBody = client.execute(httpget, responseHandler);
+        net.sf.json.JSONObject json = (net.sf.json.JSONObject) JSONSerializer.toJSON(responseBody);
+        return json.getString("id");
     }
 }
