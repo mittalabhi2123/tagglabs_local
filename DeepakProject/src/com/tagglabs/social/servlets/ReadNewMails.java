@@ -88,13 +88,11 @@ public class ReadNewMails extends HttpServlet {
             fldr.open(Folder.READ_WRITE);
             Message msg[] = fldr.search(new FlagTerm(new Flags(
                     Flags.Flag.SEEN), false));
-            System.out.println(msg.length + "...." + fldr.getUnreadMessageCount() + "...." + fldr.getNewMessageCount());
             Connection conn = Utility.getConnection();
             Statement checkUser = conn.createStatement();
             for (int i = 0; i < msg.length; i++) {
                 if (msg[i].getSubject() == null || msg[i].getSubject().trim().equalsIgnoreCase(""))
                     continue;
-                System.out.println(i+". Subject:::"+msg[i].getSubject());
                 String[] phoneNos = msg[i].getSubject().split(",");
                 Multipart multipart = null;
                 try{
@@ -122,7 +120,6 @@ public class ReadNewMails extends HttpServlet {
                         phoneNo = phoneNo.trim();
                         ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
                         while (rs.next()) {//TODO user already exists
-                            System.out.println(phoneNo);
                             ResultSet rs2 = Utility.getConnection().createStatement().executeQuery("SELECT eventId, picCaption FROM day_college WHERE city = '" + rs.getString(2) + "' LIMIT 1");
                             if(!rs2.next())
                                 break;
@@ -139,13 +136,10 @@ public class ReadNewMails extends HttpServlet {
                             System.out.println(response1.getStatusLine());
                             if (resEntity != null) {
                               String responseData = EntityUtils.toString(resEntity);
-                              System.out.println(responseData);
                               //{"id":"10152026299253058","post_id":"669853057_514100968696757"}
                               String intermediateData = responseData.split(",")[0].split(":")[1];
                               String photoId = intermediateData.substring(1, intermediateData.length() - 1);
-                              System.out.println("photoId...."+photoId);
                               String userId = getUserId(rs.getString(1), client);
-                              System.out.println("userId...."+userId);
                               HttpPost post2 = new HttpPost("https://graph.facebook.com/" + photoId + "/tags/"+userId + "?access_token="+rs.getString(1)); 
                               client.execute(post2);
                             }
@@ -183,7 +177,6 @@ public class ReadNewMails extends HttpServlet {
         String newUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
         client = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(newUrl);
-        System.out.println("Get info from face --> executing request: " + httpget.getURI());
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
         String responseBody = client.execute(httpget, responseHandler);
         net.sf.json.JSONObject json = (net.sf.json.JSONObject) JSONSerializer.toJSON(responseBody);

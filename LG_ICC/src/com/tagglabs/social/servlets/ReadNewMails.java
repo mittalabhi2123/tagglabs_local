@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
-import java.util.Random;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
@@ -98,7 +97,7 @@ public class ReadNewMails extends HttpServlet {
                 String[] phoneNos = msg[i].getSubject().split(",");
                 Multipart multipart = null;
                 try{
-                multipart = (Multipart) msg[i].getContent();
+                    multipart = (Multipart) msg[i].getContent();
                 } catch(ClassCastException ec){
                     continue;
                 }
@@ -109,7 +108,7 @@ public class ReadNewMails extends HttpServlet {
                       continue; // dealing with attachments only
                     } 
                     InputStream is = bodyPart.getInputStream();
-                    File f = new File("C:\\tmp\\" + bodyPart.getFileName());
+                    File f = new File("C:\\tmp\\" + phoneNos[0] + "." + bodyPart.getFileName().split("[.]")[1]);
                     FileOutputStream fos = new FileOutputStream(f);
                     byte[] buf = new byte[4096];
                     int bytesRead;
@@ -120,7 +119,7 @@ public class ReadNewMails extends HttpServlet {
                     System.out.println("File created....");
                     phones:for(String phoneNo : phoneNos) {
                         phoneNo = phoneNo.trim();
-                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city, twitter_auth_token, twitter_auth_secret FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
+                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city, twitter_auth_token, twitter_auth_secret, phone_no FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
                         while (rs.next()) {//TODO user already exists
                             System.out.println(phoneNo);
                             ResultSet rs2 = Utility.getConnection().createStatement().executeQuery("SELECT eventId, picCaption FROM day_college WHERE city = '" + rs.getString(2) + "' LIMIT 1");
@@ -143,11 +142,11 @@ public class ReadNewMails extends HttpServlet {
                             HttpResponse response1 = client.execute(post);
                             HttpEntity resEntity = response1.getEntity();
                             if (resEntity != null) {
-                                InputStream instream = resEntity.getContent();
-                                int l;
-                                byte[] tmp = new byte[(int)resEntity.getContentLength()];
-                                instream.read(tmp);
-                                System.out.println(new String(tmp));
+                                String responseData = EntityUtils.toString(resEntity);
+                              //{"id":"10152026299253058","post_id":"669853057_514100968696757"}
+                              String intermediateData = responseData.split(",")[0].split(":")[1];
+                              String photoId = intermediateData.substring(1, intermediateData.length() - 1);
+                              Utility.getConnection().createStatement().executeUpdate("INSERT INTO user_fb_photo VALUES ('"+rs.getString(5)+"','"+photoId+"')");
                             }
                             if (resEntity != null) {
                               resEntity.consumeContent();
@@ -157,7 +156,7 @@ public class ReadNewMails extends HttpServlet {
                         System.out.println("File posted....");
                             
                     }
-                    f.delete();
+//                    f.delete();
                 }
                 
                 

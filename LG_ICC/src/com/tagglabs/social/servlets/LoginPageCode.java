@@ -209,6 +209,8 @@ public class LoginPageCode implements Serializable {
         while (rs.next()) {
             if (accessToken != null && !accessToken.isEmpty()){
                 String placePageId = rs.getString(1);
+                if (placePageId  == null || placePageId.isEmpty())
+                    return;
                 String url = "https://graph.facebook.com/me/feed";
                 HttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(url);
@@ -225,7 +227,6 @@ public class LoginPageCode implements Serializable {
                 while ((line = rd.readLine()) != null) {
                     result.append(line);
                 }
-                System.out.println("result.............." + result);
             } else {
                 ConfigurationBuilder builder = new ConfigurationBuilder();
                 builder.setOAuthConsumerKey(Utility.TWITTER_CONSUMER_KEY);
