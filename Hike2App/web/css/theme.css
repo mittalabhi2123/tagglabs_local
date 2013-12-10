@@ -1,0 +1,205 @@
+html { 
+background: url(../images/BG_1920x1080.png) no-repeat center center fixed; 
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+
+
+
+
+.img-responsive {
+ display: block;
+ height: auto;
+ max-width: 100%;
+}
+#upper_left {
+	width: 24%; height: 35%;
+	position: absolute;
+	top: 0; left: 0;
+	_background-image: url("../images/1/sticker_upper left.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin-top: 34px;
+	 
+}
+
+
+#upper_left_phone{
+
+	width: 24%; height: 35%;
+	position: absolute;
+	top: 0; left: 0;
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin-top: 34px;
+
+}
+
+
+#upper_center {
+	 background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 41%;
+    margin-top: 37px;
+    position: absolute;
+    right: 0;
+    top: 0;
+ 
+}
+
+#upper_right {
+	 background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 44px;
+    margin-top: 37px;
+    position: absolute;
+    right: 0;
+    top: 0;
+ 
+}
+
+#lower_left {
+	 background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 39px;
+    height: 35%;
+    left: -7px;
+    position: absolute;
+    width: 24%;
+	 
+}
+
+#lower_right {
+	width: 24%; height: 35%;
+	bottom: 0%;
+	right: 0%;
+	position: absolute;
+	 margin-right: 36px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	 
+}
+
+
+ .onsucess{
+ 	display: none;
+ }
+ 
+
+.span2 {
+    width: 204px !important;
+}
+
+.center {
+     color: #FFFFFF;
+    float: none;
+    font-size: 25px;
+    line-height: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 18%;
+ 	font-family: comic sans ms;
+}
+
+
+.hidden-desktop.span2{
+	width: 132px !important
+}
+
+.center-phone{
+	color: #FFFFFF;
+    float: none;
+    font-size: 17px;
+    line-height: 22px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 88%;
+    font-family: comic sans ms;
+}
+
+#lower_right_phone {
+        background-repeat: no-repeat;
+    background-size: cover;
+    bottom: -74px;
+    height: 35%;
+    margin-right: 11px;
+    position: absolute;
+    right: 0;
+    width: 107px !important;
+}
+
+#upper_right_phone {
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 7px;
+    margin-top: 16px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 104px !important;
+}
+
+
+#upper_left_phone {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 35%;
+    left: 0;
+    margin-top: 79px;
+    position: absolute;
+    top: 0;
+    width: 104px !important;
+}
+.table_1a .center{
+	 margin-top: 29px;
+}
+
+
+.table_1a .form-control{
+	height: 25px;
+    margin-top: 9px;
+}
+
+.text-shadow{
+	 font-family: cursive;
+    font-size: 36px;
+    text-shadow: 1px 1px 1px #000000;
+}
+
+.hidden-desktop .text-shadow{
+	font-size: 22px;
+
+}
+
+.table_1a .center.hidden-desktop{
+	font-size: 19px;
+}
+.table_3 .hidden-phone .span4 {
+    margin-left: 149px;
+}
+.span4 {
+    width: 403px;
+}
+
+.table_3 .hidden-phone  .large-digit{
+	font-size: 50px;
+}
+.table_3 .hidden-desktop  .large-digit{
+	font-size: 25px;
+}
+
+.container.table_3 .hidden-phone.center{
+	margin-top: 0;
+}
+
+
+.container.table_3 .hidden-desktop.center {
+    margin-top: 94px;
+    font-size: 16px;
+    line-height: 23px;
+}
+
+
+
