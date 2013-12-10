@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      renderKitId="PRIMEFACES_MOBILE">
+    <h:head>
+        <script type="text/javascript" src="common.js"></script>
+        <style type="text/css">
+            .ddlStyle{
+                width: 20%;
+                height: 40px;
+                font-size: xx-large;
+            }
+            
+            .btnClass{
+                color: white; 
+                background-color: rgb(64, 191, 88);
+                width: 20%;
+                height: 40px;
+                text-align: center;
+                font-size: x-large;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-image: url('images/login_bg.png'); background-repeat: no-repeat;">
+        <script type="text/javascript">
+
+            function doValidatePhone()
+            {
+                showMessage("");
+                if (!validateRequiredText("loginForm:phoneNo", "Phone number"))
+                    return false;
+                return true;
+            }
+
+            function doValidatePhone2()
+            {
+                showMessage("");
+                if (!validateRequiredText("loginForm:phoneNo2", "Friend's Phone number"))
+                    return false;
+                return true;
+            }
+
+        </script>
+        <h:form id="loginForm">
+            <center>
+                <div id="wrapper" style="width: 100%">
+                    <div id="msgdiv" style="margin-top: 12%">
+                        <h:outputText id="message" style="color:red;margin:8px;"/> 
+                        <h:message id="allErrors" for="loginForm" style="color:red;margin:8px;"/>
+                    </div>
+                    <div id="loginDiv">
+                        <h:panelGrid columns="1" style="width:60%;margin-top: 1%;">
+                            <h:graphicImage url="/images/confirmMobile.png"/>
+                            <h:panelGrid columns="3" style="width:100%;margin-top: 1%;">
+                                <p:watermark for="phoneNo" value="+91" />
+                                <p:inputText id="phoneNo" onkeypress="intOnly()" value="#{loginPageCode.phoneNo}" maxlength="14" styleClass="ddlStyle">
+                                    <p:ajax event="valueChange" listener="#{loginPageCode.loadData}"/>
+                                </p:inputText>
+                                <h:commandButton value="Verify" onclick="return doValidatePhone();" action="#{loginPageCode.verify}" styleClass="btnClass"/>
+                                <h:graphicImage url="/images/error.png" style="visibility: hidden"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" id="frndPanel" style="width:100%;margin-top: 1%;">
+                                <h:graphicImage url="/images/closeFrnds.png"/>
+                                <h:graphicImage url="/images/chooseFbFrnd.png"/>
+                                <p:autoComplete id="friend" dropdown="true" value="#{loginPageCode.friend}"   
+                                        completeMethod="#{loginPageCode.completeFrndName}" >
+                                    <p:ajax event="itemSelect" listener="#{loginPageCode.loadFriend}"/>
+                                </p:autoComplete>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3" style="width:100%;margin-top: 1%;">
+                                <p:watermark for="phoneNo" value="+91" />
+                                <p:inputText id="phoneNo2" onkeypress="intOnly()" value="#{loginPageCode.phoneNo2}" maxlength="14" styleClass="ddlStyle">
+                                <p:ajax event="valueChange" listener="#{loginPageCode.loadPhone2}"/>
+                                </p:inputText>
+                                <h:panelGroup>
+                                    <a  href="#{loginPageCode.invite}">
+                                            <h:graphicImage url="images/invite.png"/>
+                                    </a>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </div>
+                    
+                </div>
+            </center>
+        </h:form>
+    </h:body>
+</html>
