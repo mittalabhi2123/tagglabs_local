@@ -50,15 +50,15 @@ public class SecurityServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession httpSession = request.getSession();
         
-         String frndId = (String)httpSession.getAttribute("friendId");
-        String frndPhone = (String)httpSession.getAttribute("friendPhone");
-        if ((frndId != null && !frndId.isEmpty()) || (frndPhone != null && !frndPhone.isEmpty())){
-            updateFriend(frndId, frndPhone, (Integer)httpSession.getAttribute("userId"), httpSession);
-            response.sendRedirect(request.getContextPath() + "/table3.html");
-            httpSession.setAttribute("friendId", null);
-            httpSession.setAttribute("friendPhone", null);
-            return;
-        }
+//         String frndId = (String)httpSession.getAttribute("friendId");
+//        String frndPhone = (String)httpSession.getAttribute("friendPhone");
+//        if ((frndId != null && !frndId.isEmpty()) || (frndPhone != null && !frndPhone.isEmpty())){
+//            updateFriend(frndId, frndPhone, (Integer)httpSession.getAttribute("userId"), httpSession);
+//            response.sendRedirect(request.getContextPath() + "/table3.html");
+//            httpSession.setAttribute("friendId", null);
+//            httpSession.setAttribute("friendPhone", null);
+//            return;
+//        }
         if (httpSession.getAttribute("TOKEN") != null){
             httpSession.setAttribute("USER", null);
             httpSession.setAttribute("EMAIL", null);

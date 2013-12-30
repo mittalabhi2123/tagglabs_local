@@ -2,11 +2,12 @@
 <html lang="en"><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>BirthDay</title>
+    <title>HIKE BIRTHDAY BASH!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+<meta name="title" content="HIKE BIRTHDAY BASH!" />
+    <meta name="description" content="It’s our 1st birthday & we’re throwing a party! You’re invited! Bring a close friend along for a fun comedy gig!" />
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -55,6 +56,17 @@
   </head>
 
   <body>
+ 
+<div id="fb-root"></div>
+ <script src="http://connect.facebook.net/en_US/all.js"></script> 
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1&appId=1402637849975673";
+
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
     <div class="container table_1a">
 
@@ -66,17 +78,35 @@
       
       <div id="lower_right" class="span2 hidden-phone"><img alt="image1" src="images/1/sticker_lower left.png"></div>
        
-<div class="span7 center text-center hidden-phone">  Confirm your mobile number <br>+91<input type="text" class="form-control" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
+<div class="span7 center text-center hidden-phone">  Confirm your mobile number <br>+91<input type="text" class="form-control mobile-top" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
     <img width="52" height="58" alt="submit" id="validator-img" src="images/2/veriify button.png">
-</button><div class="onsucess"><br><br> <br><strong class="text-shadow">We party with only close friends!</strong><br><br>Choose your Facebook Friend<br><input type="text" class="form-control span4" placeholder="Facebook Frieds"><br><br><br><br><br><br><br>+91<input type="text" class="form-control" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
-    <img width="52" height="58" alt="submit" id="validator-img" src="images/2/invite.png">
-</button></div></div>
+</button><div class="onsucess"><br><br> <br><br> Invite 1 friend to the party!<br>
 
-<div class="span7 center text-center hidden-desktop">  Confirm your mobile number <br>+91<input type="text" class="form-control-mobile" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
-    <img width="52" height="58" alt="submit" id="validator-img" src="images/2/veriify button.png">
-</button><div class="onsucess"><br><br><strong class="text-shadow">We party with only close friends!</strong><br><br>Choose your Facebook Friend<br><input type="text" class="form-control span7" placeholder="Facebook Frieds"><br><br><br><br><br>+91<input type="text" class="form-control" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
+
+<div class="fb-send" data-href="http://54.200.86.247:8084/invitation/table1.html" data-colorscheme="light" data-width="400" data-height="80"></div>
+ 
+
+ 
+<br><br><br>Do confirm your friend's number!<br>+91<input type="text" class="form-control mobile-bottom" placeholder="Friend's phone no"><button id="validate-no" style="border: 0; background: transparent"  >
     <img width="52" height="58" alt="submit" id="validator-img" src="images/2/invite.png">
-</button></div></div>
+</button><br><br><br>See you two at the party!</div></div>
+      
+      
+      <div class="span7 oops text-center hidden-phone"> <strong class="text-shadow">Oops looks like you are not on the list</strong></div>
+
+<div class="span7 center text-center hidden-desktop">  Confirm your mobile number <br>+91<input type="text" class="form-control-mobile mobile-top" placeholder="Mobile number"><button id="validate-no" style="border: 0; background: transparent"  >
+    <img width="52" height="58" alt="submit" id="validator-img" src="images/2/veriify button.png">
+</button><div class="onsucess"><br><br><br> Invite 1 friend to the party!  <br><br>
+
+
+<div class="fb-send" data-href="http://54.200.86.247:8084/invitation/table1.html" data-colorscheme="light"  data-width="400" data-height="80"></div>
+ 
+  <br><br>Do confirm your friend's number!<br>+91<input type="text" class="form-control mobile-bottom" placeholder="Friend's phone no"><button id="validate-no" style="border: 0; background: transparent"  >
+    <img width="52" height="58" alt="submit" id="validator-img" src="images/2/invite.png">
+</button><br><br><br>See you two at the party!</div></div>
+      
+      <div class="span7 oops text-center hidden-desktop"> <strong class="text-shadow">Oops looks like you are not on the list</strong></div>
+
 
     </div> <!-- /container -->
 
@@ -95,7 +125,8 @@
     <script src="js/bootstrap-button.js"></script>
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
-    <script src="js/bootstrap-typeahead.js"></script>
+ 
+     <script src="js/typehead.js"></script>
     <script src="js/birthday.js"></script>
 
   
