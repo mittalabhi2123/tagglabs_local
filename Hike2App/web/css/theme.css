@@ -8,6 +8,12 @@ background-size: cover;
 
 
 
+div,p, span {
+font-family: Helvetica !important;
+font-weight: Regular;
+}
+
+
 
 .img-responsive {
  display: block;
@@ -120,14 +126,14 @@ background-size: cover;
 }
 
 #lower_right_phone {
-        background-repeat: no-repeat;
-    background-size: cover;
-    bottom: -74px;
-    height: 35%;
-    margin-right: 11px;
-    position: absolute;
-    right: 0;
-    width: 107px !important;
+    background-repeat: no-repeat;
+background-size: cover;
+bottom: 20px;
+height: 36%;
+margin-right: 6px;
+position: absolute;
+right: 0px;
+width: 107px !important;
 }
 
 #upper_right_phone {
@@ -163,7 +169,7 @@ background-size: cover;
 }
 
 .text-shadow{
-	 font-family: cursive;
+	 
     font-size: 36px;
     text-shadow: 1px 1px 1px #000000;
 }
@@ -201,5 +207,17 @@ background-size: cover;
     line-height: 23px;
 }
 
+.oops{
+    color: white;
+    margin-left: 231px;
+    margin-top: 94px;
+    line-height: 38px;
+    display:none;
+}
 
-
+.hidden-desktop.oops{
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    display:none !important;
+    
+}

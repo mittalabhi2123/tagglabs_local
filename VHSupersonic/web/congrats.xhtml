@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <style type="text/css">
+            
+            .btnClass{
+                margin-right: 10%;
+                color: white; 
+                background-image: url('images/new.png');
+                background-repeat: no-repeat;
+                background-size: auto;
+                width: 20%;
+                height: 40px;
+                text-align: center;
+                font-size: small;
+            }
+            
+            .btnClass1{
+                margin-top: 10%;
+                color: white; 
+                background-color: rgb(51,102,255);
+                width: 110%;
+                height: 102%;
+                text-align: center;
+                font-size: xx-large;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-image: url('images/bg_3.png'); background-repeat: no-repeat;">
+        <h:form id="loginForm">
+            <center>
+                <div id="wrapper" style="margin-top: 10%; width: 100%">
+                    <div id="loginDiv">
+                        <h:panelGrid columns="1" style="width:60%;">
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            <h:panelGroup><br/><br/></h:panelGroup>
+                            
+                            <!--<h:graphicImage url="/images/tnx.png"/>-->
+                            <h:panelGroup>
+                                <a href="/vhs/logout" style="margin-left: 10%">
+                                        <h:graphicImage url="images/new.png"/>
+                                </a>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </div>
+                </div>
+            </center>
+        </h:form>
+    </h:body>
+</html>

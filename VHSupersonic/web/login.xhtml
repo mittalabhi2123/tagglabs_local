@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      renderKitId="PRIMEFACES_MOBILE">
+    <h:head>
+        <script type="text/javascript" src="common.js"></script>
+        <style type="text/css">
+            .ddlStyle{
+                width: 40%;
+                height: 80px;
+                font-size: xx-large;
+            }
+            
+            .btnClass{
+                color: white; 
+                background-color: rgb(60,210,85);
+                width: 40%;
+                height: 80px;
+                text-align: center;
+                font-size: xx-large;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-image: url('images/bg3.png'); background-repeat: no-repeat;">
+        <script type="text/javascript">
+
+            function doValidate()
+            {
+                showMessage("");
+                if (!validateRequiredText("loginForm:phoneNo", "Phone number"))
+                    return false;
+                return true;
+            }
+
+
+        </script>
+        <h:form id="loginForm">
+            <center>
+                <div id="wrapper" style="width: 100%">
+                    <div id="msgdiv" style="margin-top: 12%">
+                        <h:outputText id="message" style="color:red;margin:8px;"/> 
+                        <h:message id="allErrors" for="loginForm" style="color:red;margin:8px;"/>
+                    </div>
+                    <div id="loginDiv">
+                        <h:panelGrid columns="1" style="width:60%;margin-top: 1%;">
+                            <!--<h:graphicImage url="/images/numb.png"/>-->
+                            <p:watermark for="phoneNo" value="Mobile No." />
+                            <p:inputText id="phoneNo" onkeypress="intOnly()" value="#{loginPageCode.phoneNo}" maxlength="14" styleClass="ddlStyle">
+                                <!--<p:ajax event="valueChange" listener="#{loginPageCode.loadData}"/>-->
+                            </p:inputText>
+                            
+                            <p:watermark for="name" value="Name" />
+                            <p:inputText id="name" value="#{loginPageCode.name}" maxlength="50" styleClass="ddlStyle"/>
+                            <h:commandButton value="Submit" onclick="return doValidate();" action="#{loginPageCode.submit}" styleClass="btnClass"/>
+                        </h:panelGrid>
+                    </div>
+                    
+                </div>
+            </center>
+        </h:form>
+    </h:body>
+</html>
