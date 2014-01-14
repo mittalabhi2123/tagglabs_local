@@ -23,21 +23,23 @@ public class SaveImages extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        System.out.println("Request Received");
         try {
-//            String uid = request.getHeader("id");
-//            String zone = request.getHeader("zone");
+            String uid = request.getHeader("id");
+            String zone = request.getHeader("zone");
             
             
-            String uid = request.getPart("id").getName();
-            String zone = request.getPart("zone").getName();
-            
+//            String uid = request.getPart("id").getName();
+//            String zone = request.getPart("zone").getName();
+            System.out.println(uid+"...."+zone);
             Random rand = new Random();
             
-            File file  = new File("data"+File.separator+uid+File.separator+(uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
+            File file1  = new File(File.separator+"data"+File.separator+uid);
+            file1.mkdirs();
+            File file = new File(file1, (uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
             if (file.exists())
-                file  = new File("data"+File.separator+uid+File.separator+(uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
-            file.mkdirs();
-            BufferedInputStream bis = new BufferedInputStream(request.getPart("file").getInputStream());
+                file  = new File(file1, (uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
+            BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
 //            BufferedInputStream bis = new BufferedInputStream(is);
             FileOutputStream fos = new FileOutputStream(file, true);
             byte[] b = new byte[4096];
