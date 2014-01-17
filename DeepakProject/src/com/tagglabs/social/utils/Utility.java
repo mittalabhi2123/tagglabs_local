@@ -14,6 +14,10 @@ public class Utility {
     public static final String TWITTER_CONSUMER_SECRET = "jQqTKWDNW2XLLxZ6yowEfax3QjScJ848Bg89NQUBt5E";
     
     public static final String HASH_TAG = "#ihike";
+    
+    public static final String EMAIL = "hikecollejing@gmail.com";
+    public static final String PASSWORD = "12345six";
+    
         
     public static final String EMAIL = "hikecollejing@gmail.com";
     public static final String PASSWORD = "12345@six";

@@ -10,7 +10,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
+<<<<<<< Updated upstream
 import java.util.Random;
+=======
+import javax.mail.Address;
+>>>>>>> Stashed changes
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
@@ -27,11 +31,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+<<<<<<< Updated upstream
 import net.sf.json.JSONSerializer;
+=======
+>>>>>>> Stashed changes
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+<<<<<<< Updated upstream
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -42,6 +50,13 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+=======
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+>>>>>>> Stashed changes
 
 /**
  *
@@ -88,11 +103,16 @@ public class ReadNewMails extends HttpServlet {
             fldr.open(Folder.READ_WRITE);
             Message msg[] = fldr.search(new FlagTerm(new Flags(
                     Flags.Flag.SEEN), false));
+<<<<<<< Updated upstream
+=======
+            System.out.println(msg.length + "...." + fldr.getUnreadMessageCount() + "...." + fldr.getNewMessageCount());
+>>>>>>> Stashed changes
             Connection conn = Utility.getConnection();
             Statement checkUser = conn.createStatement();
             for (int i = 0; i < msg.length; i++) {
                 if (msg[i].getSubject() == null || msg[i].getSubject().trim().equalsIgnoreCase(""))
                     continue;
+<<<<<<< Updated upstream
                 String[] phoneNos = msg[i].getSubject().split(",");
                 Multipart multipart = null;
                 try{
@@ -100,6 +120,12 @@ public class ReadNewMails extends HttpServlet {
                 } catch(ClassCastException ec){
                     continue;
                 }
+=======
+                System.out.println(i+". Subject:::"+msg[i].getSubject());
+                String[] phoneNos = msg[i].getSubject().split(",");
+                Multipart multipart = (Multipart) msg[i].getContent();
+                
+>>>>>>> Stashed changes
                 for (int j = 0; j < multipart.getCount(); j++) {
                     BodyPart bodyPart = multipart.getBodyPart(j);
                     if(!Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) &&
@@ -107,7 +133,11 @@ public class ReadNewMails extends HttpServlet {
                       continue; // dealing with attachments only
                     } 
                     InputStream is = bodyPart.getInputStream();
+<<<<<<< Updated upstream
                     File f = new File("C:\\tmp\\" + bodyPart.getFileName());
+=======
+                    File f = new File("/tmp/" + bodyPart.getFileName());
+>>>>>>> Stashed changes
                     FileOutputStream fos = new FileOutputStream(f);
                     byte[] buf = new byte[4096];
                     int bytesRead;
@@ -117,6 +147,7 @@ public class ReadNewMails extends HttpServlet {
                     fos.close();
                     System.out.println("File created....");
                     for(String phoneNo : phoneNos) {
+<<<<<<< Updated upstream
                         phoneNo = phoneNo.trim();
                         ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token,city FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
                         while (rs.next()) {//TODO user already exists
@@ -131,10 +162,19 @@ public class ReadNewMails extends HttpServlet {
                             reqEntity.addPart("message", new StringBody(message));
                             post.setEntity(reqEntity);
                             post.setHeader("message", message);
+=======
+                        ResultSet rs = checkUser.executeQuery("SELECT fb_auth_token FROM users WHERE phone_no LIKE '%" + phoneNo + "%'");
+                        while (rs.next()) {//TODO user already exists
+                            HttpPost post = new HttpPost("https://graph.facebook.com/me/photos?access_token="+rs.getString(1)); 
+                            MultipartEntity reqEntity = new MultipartEntity();
+                            reqEntity.addPart("source", new FileBody(f));
+                            post.setEntity(reqEntity);
+>>>>>>> Stashed changes
                             HttpResponse response1 = client.execute(post);
                             HttpEntity resEntity = response1.getEntity();
                             System.out.println(response1.getStatusLine());
                             if (resEntity != null) {
+<<<<<<< Updated upstream
                               String responseData = EntityUtils.toString(resEntity);
                               //{"id":"10152026299253058","post_id":"669853057_514100968696757"}
                               String intermediateData = responseData.split(",")[0].split(":")[1];
@@ -142,10 +182,14 @@ public class ReadNewMails extends HttpServlet {
                               String userId = getUserId(rs.getString(1), client);
                               HttpPost post2 = new HttpPost("https://graph.facebook.com/" + photoId + "/tags/"+userId + "?access_token="+rs.getString(1)); 
                               client.execute(post2);
+=======
+                              System.out.println(EntityUtils.toString(resEntity));
+>>>>>>> Stashed changes
                             }
                             if (resEntity != null) {
                               resEntity.consumeContent();
                             }
+<<<<<<< Updated upstream
                             fldr.setFlags(new Message[]{msg[i]}, new Flags(Flags.Flag.SEEN), true);
                         }
                         System.out.println("File posted....");
@@ -154,15 +198,28 @@ public class ReadNewMails extends HttpServlet {
                     f.delete();
                 }
                 
+=======
+                        }
+                        System.out.println("File posted....");
+                            client.getConnectionManager().shutdown();
+                    }
+                }
+                fldr.setFlags(msg, new Flags(Flags.Flag.SEEN), true);
+>>>>>>> Stashed changes
                 System.out.println("SentDate : " + msg[i].getSentDate() + "\n" + "From : " + msg[i].getFrom()[0] + "\n" + "Subject : " + msg[i].getSubject() + "\n" + "Message : " + "\n" + msg[i].getContent().toString());
             }
             fldr.close(true);
             store.close();
+<<<<<<< Updated upstream
             client.getConnectionManager().shutdown();
         } catch (Exception e) {
             try{
                 client.getConnectionManager().shutdown();
                             
+=======
+        } catch (Exception e) {
+            try{
+>>>>>>> Stashed changes
             fldr.close(true);
             store.close();
             } catch(Exception e1){
@@ -172,6 +229,7 @@ public class ReadNewMails extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+<<<<<<< Updated upstream
 
     private String getUserId(String accessToken, HttpClient client) throws IOException {
         String newUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
@@ -182,4 +240,6 @@ public class ReadNewMails extends HttpServlet {
         net.sf.json.JSONObject json = (net.sf.json.JSONObject) JSONSerializer.toJSON(responseBody);
         return json.getString("id");
     }
+=======
+>>>>>>> Stashed changes
 }

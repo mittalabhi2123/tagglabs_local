@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.PreparedStatement;
 import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,20 +28,15 @@ public class SaveImages extends HttpServlet {
         try {
             String uid = request.getHeader("id");
             String zone = request.getHeader("zone");
-            
-            
-//            String uid = request.getPart("id").getName();
-//            String zone = request.getPart("zone").getName();
             System.out.println(uid+"...."+zone);
             Random rand = new Random();
             
-            File file1  = new File(File.separator+"data"+File.separator+uid);
+            File file1  = new File(File.separator+"data"+File.separator+zone+File.separator+uid);
             file1.mkdirs();
-            File file = new File(file1, (uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
+            File file = new File(file1, (uid+"_"+rand.nextInt(99999))+".jpg");
             if (file.exists())
-                file  = new File(file1, (uid+"_"+zone+"_"+rand.nextInt(999))+".jpg");
+                file  = new File(file1, (uid+"_"+rand.nextInt(99999))+".jpg");
             BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
-//            BufferedInputStream bis = new BufferedInputStream(is);
             FileOutputStream fos = new FileOutputStream(file, true);
             byte[] b = new byte[4096];
             int current = 0;
@@ -50,7 +46,18 @@ public class SaveImages extends HttpServlet {
             bis.close();
             fos.close();
             response.setStatus(200);
-        } finally {
+            PreparedStatement prep = Utility.getConnection().prepareStatement("INSERT INTO files VALUES (?,?,?,?,?,?)");
+            prep.setString(1, file.getName());
+            prep.setString(2, file.getAbsolutePath());
+            prep.setString(3, uid);
+            prep.setString(4, zone);
+            prep.setInt(5, 0);
+            prep.setLong(6, file.length());
+            prep.executeUpdate();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        finally {
         }
     }
 
