@@ -2,10 +2,12 @@
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.sql.PreparedStatement;
 import java.util.Random;
 import javax.servlet.ServletException;
@@ -46,14 +48,26 @@ public class SaveImages extends HttpServlet {
             bis.close();
             fos.close();
             response.setStatus(200);
-            PreparedStatement prep = Utility.getConnection().prepareStatement("INSERT INTO files VALUES (?,?,?,?,?,?)");
+            PreparedStatement prep = Utility.getConnection().prepareStatement("INSERT INTO files VALUES (?,?,?,?,?,?,?)");
             prep.setString(1, file.getName());
             prep.setString(2, file.getAbsolutePath());
             prep.setString(3, uid);
             prep.setString(4, zone);
             prep.setInt(5, 0);
             prep.setLong(6, file.length());
+            prep.setInt(7,0);
             prep.executeUpdate();
+            final File file2Copy = file;
+            new Thread(){
+                public void run(){
+                    try{
+                        copyFile(file2Copy);
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            };
+            
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -72,4 +86,31 @@ public class SaveImages extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+    
+    
+    private static void copyFile(File sourceFile)
+		throws IOException {
+	if (!sourceFile.exists()) {
+		return;
+	}
+        File destFile = new File(File.separator+"slideshow", sourceFile.getName());
+	if (!destFile.exists()) {
+                destFile.mkdirs();
+		destFile.createNewFile();
+	}
+	FileChannel source = null;
+	FileChannel destination = null;
+	source = new FileInputStream(sourceFile).getChannel();
+	destination = new FileOutputStream(destFile).getChannel();
+	if (destination != null && source != null) {
+		destination.transferFrom(source, 0, source.size());
+	}
+	if (source != null) {
+		source.close();
+	}
+	if (destination != null) {
+		destination.close();
+	}
+
+}
 }

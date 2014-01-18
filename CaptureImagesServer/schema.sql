@@ -5,5 +5,6 @@ CREATE TABLE files (
 	zone			varchar(100),
 	fetched			decimal(1),
 	filesize		decimal(15),
-	PRIMARY KEY (filename, filepath)
+	slideshow		decimal(1),
+	PRIMARY KEY (filename, id, zone)
 );
