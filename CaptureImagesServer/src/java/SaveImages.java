@@ -46,7 +46,6 @@ public class SaveImages extends HttpServlet {
             while ((current = bis.read(b)) != -1) {
                     fos.write(b, 0, current);
                     fos2.write(b,0,current);
-                    
             }
             bis.close();
             fos2.close();

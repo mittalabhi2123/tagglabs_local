@@ -1,7 +1,6 @@
 import java.io.*;
 import java.sql.ResultSet;
 
-import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
@@ -24,11 +23,13 @@ public class DownloadImageServlet extends HttpServlet {
             
             int filesPendingNum = 0;
             File file = null;
+            uid = "";
             while(rs.next()){
                 filesPendingNum++;
                 if (file != null)
                     continue;
                 file = new File(rs.getString(2));
+                uid = rs.getString(3);
             }
             if (file == null)
                 return;
@@ -36,12 +37,13 @@ public class DownloadImageServlet extends HttpServlet {
             raf1.seek(0);
             byte b1[] = new byte[(int)raf1.length()];
             raf1.readFully(b1);
-                --filesPendingNum;
+            --filesPendingNum;
             response.setContentType("application/octet-stream");
             response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
             response.addHeader("fileName", file.getName());
             response.addIntHeader("filesLeft",(filesPendingNum > 0) ? 1 : 0);
             response.addIntHeader("fileSize", b1.length);
+            response.addHeader("id", uid);
             response.getOutputStream().write(b1);
             response.getOutputStream().flush();
             response.getOutputStream().close();

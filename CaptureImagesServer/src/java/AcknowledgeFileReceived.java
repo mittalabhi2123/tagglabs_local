@@ -19,10 +19,9 @@ public class AcknowledgeFileReceived extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String uid = request.getHeader("id");
             String zone = request.getHeader("zone");
             String fileName = request.getHeader("fileName");
-            Utility.getConnection().createStatement().executeUpdate("UPDATE files SET fetched = 1 WHERE zone = '"+zone+"' AND id = '"+uid+"' AND filename = '"+fileName+"'");
+            Utility.getConnection().createStatement().executeUpdate("UPDATE files SET fetched = 1 WHERE zone = '"+zone+"' AND filename = '"+fileName+"'");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {      
