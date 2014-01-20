@@ -19,7 +19,8 @@ public class DownloadImageServlet extends HttpServlet {
         try {
             String uid = request.getHeader("id");
             String zone = request.getHeader("zone");
-            ResultSet rs = Utility.getConnection().createStatement().executeQuery("SELECT * FROM files WHERE zone = '"+zone+"'");
+            System.out.println("ZONE:UID"+zone+":"+uid);
+            ResultSet rs = Utility.getConnection().createStatement().executeQuery("SELECT * FROM files WHERE zone = '"+zone+"' AND fetched = 0");
             
             int filesPendingNum = 0;
             File file = null;
@@ -29,6 +30,8 @@ public class DownloadImageServlet extends HttpServlet {
                     continue;
                 file = new File(rs.getString(2));
             }
+            if (file == null)
+                return;
             raf1 = new RandomAccessFile(file, "r"); 
             raf1.seek(0);
             byte b1[] = new byte[(int)raf1.length()];
