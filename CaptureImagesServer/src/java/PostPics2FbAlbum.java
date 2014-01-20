@@ -2,6 +2,7 @@
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.auth.AccessToken;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Timer;
